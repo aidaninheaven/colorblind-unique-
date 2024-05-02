@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void get_maleInput(int& input, const string& prompt) {
+    cout << prompt;
+    while (!(cin >> input)) {
+        cin.clear();
+        string invalidInput;
+        getline(cin, invalidInput); // Clear input buffer
+        cout << invalidInput << " is not a valid input. Please enter a number: ";
+    }
+}
+
+void get_femaleInput(int& input, const string& prompt) {
+    cout << prompt;
+    while (!(cin >> input)) {
+        cin.clear();
+        string invalidInput;
+        getline(cin, invalidInput); // Clear input buffer
+        cout << invalidInput << " is not a valid input. Please enter a number: ";
+    }
+}
+
+int main() {
+    int maleInput;
+    int femaleInput;
+
+    get_maleInput(maleInput, "Is the father colorblind? 1 for yes, 0 for no: ");
+    while (maleInput != 1 && maleInput != 0) {
+        cout << "Invalid input, try again: ";
+        get_maleInput(maleInput, "Is the father colorblind? 1 for yes, 0 for no: ");
+    }
+
+    string maleGeno1 = (maleInput == 1) ? "Xc" : "X";
+    string maleGeno2 = "Y";
+
+    cout << maleGeno1 << maleGeno2 << endl;
+
+    get_femaleInput(femaleInput, "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ");
+    while (femaleInput < 0 || femaleInput > 2) {
+        cout << "Invalid input, try again: ";
+        get_femaleInput(femaleInput, "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ");
+    }
+
+    string femaleGeno1, femaleGeno2;
+    if (femaleInput == 0) {
+        femaleGeno1 = "X";
+        femaleGeno2 = "X";
+    } else if (femaleInput == 1) {
+        femaleGeno1 = "Xc";
+        femaleGeno2 = "Xc";
+    } else {
+        femaleGeno1 = "Xc";
+        femaleGeno2 = "X";
+    }
+
+    cout << femaleGeno1 << femaleGeno2 << endl;
+
+    return 0;
+}
