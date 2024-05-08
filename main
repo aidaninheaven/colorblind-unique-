@@ -2,74 +2,75 @@
 #include <string>
 
 using namespace std;
-//input functions, only accepts numbers.
-void get_maleInput(int& input, const string& prompt) {
-    cout << prompt;
-    while (!(cin >> input)) {
-        cin.clear();
-        string invalidInput;
-        getline(cin, invalidInput); // Clear input buffer
-        cout << invalidInput << " is not a valid input. Please enter a number: ";
-    }
-}
 
-void get_femaleInput(int& input, const string& prompt) {
-    cout << prompt;
-    while (!(cin >> input)) {
-        cin.clear();
-        string invalidInput;
-        getline(cin, invalidInput); // Clear input buffer
-        cout << invalidInput << " is not a valid input. Please enter a number: ";
-    }
-}
+// Function declarations
+void get_maleInput(int& maleInput);
+void get_femaleInput(int& femaleInput);
+void printInfo(int& femaleInput, int& maleInput);
+void displayPunnet(const string& maleGeno1, const string& maleGeno2, const string& femaleGeno1, const string& femaleGeno2);
+void calculateGeno(int& femaleInput, int& maleInput, string& maleGeno1, string& maleGeno2, string& femaleGeno1, string& femaleGeno2);
+
 
 int main() {
     int maleInput;
     int femaleInput;
 
+    string maleGeno1;
+    string maleGeno2;
+    string femaleGeno1;
+    string femaleGeno2;
 
-    // asks the user if the father is colorblind, then displays the correct genotype
-    get_maleInput(maleInput, "Is the father colorblind? 1 for yes, 0 for no: ");
-    while (maleInput != 1 && maleInput != 0) {
-        cout << "Invalid input, try again: ";
-        get_maleInput(maleInput, "Is the father colorblind? 1 for yes, 0 for no: ");
+    while (true) {
+        get_maleInput(maleInput);
+        get_femaleInput(femaleInput);
+
+        calculateGeno(femaleInput, maleInput, maleGeno1, maleGeno2, femaleGeno1, femaleGeno2);
+        displayPunnet(maleGeno1, maleGeno2, femaleGeno1, femaleGeno2);
+        printInfo(femaleInput, maleInput);
     }
+    return 0;
+}
 
-    string maleGeno1 = (maleInput == 1) ? "Xc" : "X";
-    string maleGeno2 = "Y";
+// defining input functions, only accepts numbers.
+void get_maleInput(int& maleInput) {
+    cout << "Is the father colorblind? 1 for yes, 0 for no: ";
+    cin >> maleInput;
+    while (maleInput != 1 && maleInput != 0) {
+        cout << "Invalid input, try again: " << endl;
+        cout << "Is the father colorblind? 1 for yes, 0 for no: ";
+        cin >> maleInput;
+    }
+}
 
-    cout << endl << maleGeno1 << maleGeno2 << endl << endl;
-
-
-    // asks the user if the mother is colorblind or a carrier, then displays the correct genotype
-    get_femaleInput(femaleInput, "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ");
+void get_femaleInput(int& femaleInput) {
+    cout << "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ";
+    cin >> femaleInput;
     while (femaleInput < 0 || femaleInput > 2) {
         cout << "Invalid input, try again: ";
-        get_femaleInput(femaleInput, "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ");
+        cout << "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ";
+        cin >> femaleInput;
     }
+}
 
-    string femaleGeno1, femaleGeno2;
-    if (femaleInput == 0) {
-        femaleGeno1 = "X";
-        femaleGeno2 = "X";
-    } else if (femaleInput == 1) {
-        femaleGeno1 = "Xc";
-        femaleGeno2 = "Xc";
-    } else {
-        femaleGeno1 = "Xc";
-        femaleGeno2 = "X";
-    }
+void calculateGeno(int& femaleInput, int& maleInput, string& maleGeno1, string& maleGeno2, string& femaleGeno1, string& femaleGeno2) {
+    maleGeno1 = (maleInput == 1) ? "Xc" : "X";
+    maleGeno2 = "Y";
 
-    cout <<  endl << femaleGeno1 << femaleGeno2 << endl << endl;
+    femaleGeno1 = (femaleInput == 1) ? "Xc" : "X";
+    femaleGeno2 = (femaleInput == 0) ? "X" : "Xc";
+}
 
-
-    //displaying the punnet square
+void displayPunnet(const string& maleGeno1, const string& maleGeno2, const string& femaleGeno1, const string& femaleGeno2) {
+    // Displaying the Punnett square
     cout << "       " << femaleGeno1 << "       " << femaleGeno2 << "\n";
     cout << "     -----------------\n";
     cout << " " << maleGeno1 << "  |  " << femaleGeno1 << maleGeno1 << "  |  " << femaleGeno2 << maleGeno1 << " |\n";
     cout << "     -----------------\n";
     cout << " " << maleGeno2 << "  |  " << femaleGeno1 << maleGeno2 << "  |  " << femaleGeno2 << maleGeno2 << " |\n";
     cout << "     -----------------\n" << endl;
+}
+
+void printInfo(int& femaleInput, int& maleInput) {
 
     // displaying the phenotype results
     if (femaleInput == 0 && maleInput == 0) {
@@ -78,7 +79,7 @@ int main() {
         cout << "Female Colorblind: 0%" << endl;
         cout << "Male Non-Colorblind: 50%" << endl;
         cout << "Female Non-Colorblind: 50%" << endl;
-        cout << "Female Carrier: 0%" << endl;
+        cout << "Female Carrier: 0%" << endl << endl;
     }
        else if (maleInput == 0 && femaleInput == 1) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
@@ -86,7 +87,7 @@ int main() {
         cout << "Female Colorblind: 0%" << endl;
         cout << "Female Non-Colorblind: 0%" << endl;
         cout << "Male Non-Colorblind: 0%" << endl;
-        cout << "Female Carrier: 50%" << endl;
+        cout << "Female Carrier: 50%" << endl << endl;
         }
          else if (maleInput == 0 && femaleInput == 2) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
@@ -94,7 +95,7 @@ int main() {
         cout << "Female Colorblind: 0%" << endl;
         cout << "Female Non-Colorblind: 25%" << endl;
         cout << "Male Non-Colorblind: 25%" << endl;
-        cout << "Female Carrier: 25%" << endl;
+        cout << "Female Carrier: 25%" << endl << endl;
         }
          else if (maleInput == 1 && femaleInput == 0) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
@@ -102,7 +103,7 @@ int main() {
         cout << "Female Colorblind: 0%" << endl;
         cout << "Female Non-Colorblind: 0%" << endl;
         cout << "Male Non-Colorblind: 50%" << endl;
-        cout << "Female Carrier: 50%" << endl;
+        cout << "Female Carrier: 50%" << endl << endl;
         }
          else if (maleInput == 1 && femaleInput == 1) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
@@ -110,7 +111,7 @@ int main() {
         cout << "Female Colorblind: 50%" << endl;
         cout << "Female Non-Colorblind: 0%" << endl;
         cout << "Male Non-Colorblind: 0%" << endl;
-        cout << "Female Carrier: 0%" << endl;
+        cout << "Female Carrier: 0%" << endl << endl;
         }
          else if (maleInput == 1 && femaleInput == 2) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
@@ -118,8 +119,6 @@ int main() {
         cout << "Female Colorblind: 25%" << endl;
         cout << "Female Non-Colorblind: 0%" << endl;
         cout << "Male Non-Colorblind: 25%" << endl;
-        cout << "Female Carrier: 25%" << endl;
+        cout << "Female Carrier: 25%" << endl << endl;
         }
-    return 0;
 }
-
