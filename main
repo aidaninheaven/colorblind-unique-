@@ -2,7 +2,7 @@
 #include <string>
 
 using namespace std;
-
+//input functions, only accepts numbers.
 void get_maleInput(int& input, const string& prompt) {
     cout << prompt;
     while (!(cin >> input)) {
@@ -27,6 +27,8 @@ int main() {
     int maleInput;
     int femaleInput;
 
+
+    // asks the user if the father is colorblind, then displays the correct genotype
     get_maleInput(maleInput, "Is the father colorblind? 1 for yes, 0 for no: ");
     while (maleInput != 1 && maleInput != 0) {
         cout << "Invalid input, try again: ";
@@ -38,6 +40,8 @@ int main() {
 
     cout << endl << maleGeno1 << maleGeno2 << endl << endl;
 
+
+    // asks the user if the mother is colorblind or a carrier, then displays the correct genotype
     get_femaleInput(femaleInput, "Is the mother colorblind, non-colorblind, or a carrier? 1 for colorblind, 0 for non-colorblind, or 2 for a carrier: ");
     while (femaleInput < 0 || femaleInput > 2) {
         cout << "Invalid input, try again: ";
@@ -67,7 +71,7 @@ int main() {
     cout << " " << maleGeno2 << "  |  " << femaleGeno1 << maleGeno2 << "  |  " << femaleGeno2 << maleGeno2 << " |\n";
     cout << "     -----------------\n" << endl;
 
-
+    // displaying the phenotype results
     if (femaleInput == 0 && maleInput == 0) {
         cout << "The Probabilities of your children are listed below:" << endl << endl;
         cout << "Male Colorblind: 0%" << endl;
